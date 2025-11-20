@@ -1,0 +1,106 @@
+{{ define "content" }}
+<div class="py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold text-center text-blue-900">Recent Events</h1>
+
+    <article class="mt-10 bg-white rounded-xl shadow p-6">
+      <div class="flex flex-col md:flex-row md:items-start gap-6">
+        <div class="flex-shrink-0">
+          <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[100px]">
+            <div class="text-2xl font-bold">15</div>
+            <div class="text-sm uppercase tracking-wider">NOV</div>
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold text-blue-900">
+            Qazaq Society Teams Up with the Embassy of Kazakhstan in Belgium for a Friendly Football Match with FUTI Ahead of the Kazakhstan–Belgium Game
+          </h2>
+
+          <p class="mt-2 text-sm text-gray-600">
+            <i class="far fa-calendar-alt"></i> November 15, 2025 | 15:00 - 17:30
+          </p>
+
+          <p class="mt-4 text-gray-700">
+            Members of the Qazaq Society, together with the Embassy of the Republic of Kazakhstan in Belgium, organized a friendly football match with the FUTI (KU Leuven Student Association Football Team) team on the embassy grounds. The event was honored by the presence of <strong>His Excellency Roman Vassilenko, Ambassador of Kazakhstan to the Kingdom of Belgium</strong>, who delivered an inspiring speech wishing the players success and officially launched the match with a ceremonial first kick.
+          </p>
+
+          <p class="mt-3 text-gray-700">
+            <strong>Amirlan Nurbalin, President of the Qazaq Society</strong>, noted that the initiative was held in anticipation of the upcoming national team match on November 15, where Kazakhstan will face Belgium.
+          </p>
+
+          <p class="mt-3 text-gray-700">
+            <strong>FUTI Vice President Sarosh Sultan</strong> also expressed gratitude to the Qazaq Society and the Embassy for the warm collaboration.
+          </p>
+
+          <p class="mt-3 text-gray-700">
+            The event fostered cultural connection, strengthened community spirit, and highlighted the Qazaq Society’s active role in promoting Kazakh culture and unity across Europe.
+          </p>
+
+          <div class="mt-6 text-sm text-gray-600">
+            <i class="fas fa-map-marker-alt"></i> Embassy of Kazakhstan, Brussels
+          </div>
+
+          <!-- Slider -->
+          <div class="mt-6 relative overflow-hidden rounded-lg">
+            <button class="slide-btn prev absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-lg z-20">❮</button>
+
+            <div class="slides-container flex transition-transform duration-400 ease-in-out h-96">
+              <img src="/assets/images/GroupPhoto.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/futieventmain.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/WithFutiLeader.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/RomanVasilienkoOnField.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/football1.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/football2.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/football3.JPG" class="w-full h-full object-cover flex-shrink-0">
+              <img src="/assets/images/football4.JPG" class="w-full h-full object-cover flex-shrink-0">
+            </div>
+
+            <button class="slide-btn next absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-lg z-20">❯</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="mt-12">
+      <div class="bg-white rounded-xl shadow p-6 text-center">
+        <h3 class="text-xl font-semibold">Upcoming Events</h3>
+        <p class="mt-4 text-gray-600">Check back soon for more events.</p>
+        <a href="#" class="mt-4 inline-block px-6 py-3 rounded-full bg-blue-600 text-white hover:bg-transparent border-2 border-blue-600 transition">
+          View Past Events
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Slider Script -->
+<script>
+(function() {
+  const slidesContainer = document.querySelector('.slides-container');
+  if (!slidesContainer) return;
+
+  const slides = Array.from(slidesContainer.children);
+  let index = 0;
+
+  const update = function() {
+    slidesContainer.style.transform = 'translateX(' + (-index * 100) + '%)';
+  };
+
+  document.querySelectorAll('.next').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      index = (index + 1) % slides.length;
+      update();
+    });
+  });
+
+  document.querySelectorAll('.prev').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      index = (index - 1 + slides.length) % slides.length;
+      update();
+    });
+  });
+})();
+</script>
+
+{{ end }}

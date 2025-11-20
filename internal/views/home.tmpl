@@ -1,0 +1,196 @@
+{{ define "content" }}
+<!-- Hero -->
+<section class="relative bg-cover bg-center" style="background-image: url('/assets/images/main photo.jpeg'); min-height: 70vh;">
+  <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/60"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center text-white">
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Welcome to Qazaq Society in Belgium</h1>
+    <p class="mt-4 text-lg sm:text-xl max-w-2xl mx-auto">Connecting the Kazakh community through culture, language, and shared experiences</p>
+    <div class="mt-8 flex justify-center gap-4 flex-wrap">
+      <a href="#events" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-transparent border-2 border-blue-600 text-white hover:text-blue-600 transition">Upcoming Events</a>
+      <a href="#join" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-transparent border-2 border-blue-600 text-white hover:text-blue-600 transition">Join Our Community</a>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services" class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center text-blue-900">What Do We Provide</h2>
+    <div class="mt-12 grid gap-8 grid-cols-1 md:grid-cols-3">
+      <div class="bg-white rounded-xl shadow p-6 border-t-4 border-blue-600 text-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Cultural Celebrations</h3>
+        <p class="text-gray-600">Events like Nauryz, Kazakh food fairs, traditional music and dance performances.</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow p-6 border-t-4 border-blue-600 text-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4">
+          <i class="fas fa-language"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Language & Literature</h3>
+        <p class="text-gray-600">Beginner and intermediate Kazakh classes, conversation circles, and literature reading nights.</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow p-6 border-t-4 border-blue-600 text-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Workshops</h3>
+        <p class="text-gray-600">Topics such as Kazakh history, crafts, cooking, and career preparation workshops.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Events preview -->
+<section id="events" class="py-20 relative bg-cover bg-center" style="background-image: url('/assets/images/GroupPhoto.JPG');">
+  <div class="absolute inset-0 bg-black/50"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+    <h2 class="text-3xl font-bold text-center">Events</h2>
+
+    <div class="mt-8 bg-white/95 rounded-xl shadow p-6 max-w-2xl mx-auto flex items-center gap-6 text-left text-gray-800">
+      <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[80px]">
+        <div class="text-2xl font-bold">15</div>
+        <div class="text-sm uppercase tracking-wider">NOV</div>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-blue-900">FUTI Event at the Embassy of Kazakhstan</h3>
+        <p class="text-sm text-gray-600 mt-1"><i class="far fa-clock"></i> 15:00 - 17:30</p>
+        <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt"></i> Embassy of Kazakhstan in Belgium, Brussels</p>
+        <a href="/events" class="inline-block mt-3 px-4 py-2 rounded-full border border-white text-white hover:bg-white hover:text-blue-600 transition">Learn More</a>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <a href="/events" class="inline-block px-6 py-3 rounded-full border border-white text-white hover:bg-white hover:text-blue-600 transition">View All Events</a>
+    </div>
+  </div>
+</section>
+
+<!-- About preview -->
+<section id="about" class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-2 items-start">
+      <div>
+        <h2 class="text-3xl font-bold text-blue-900">Our Story</h2>
+        <div class="mt-8 space-y-8">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2023</div>
+            <div>
+              <h4 class="text-xl font-semibold">First Group Trip to Brugge</h4>
+              <p class="text-gray-600">First group trip to Brugge planned by Qazaq Society.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2024</div>
+            <div>
+              <h4 class="text-xl font-semibold">First Joint Nauryz Celebration</h4>
+              <p class="text-gray-600">Successfully organized with multiple Central Asian societies.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2025</div>
+            <div>
+              <h4 class="text-xl font-semibold">Expanded Reach</h4>
+              <p class="text-gray-600">Growth of membership across Brussels and Leuven.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="hidden lg:block">
+        <img src="/assets/images/GroupPhoto.JPG" alt="Group photo" class="rounded-xl shadow-lg">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Join -->
+<section id="join" class="py-20 bg-blue-600 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl font-bold">Become Part of Our Community</h2>
+      <p class="mt-4 text-lg">Join us in celebrating Kazakh culture and building meaningful connections</p>
+    </div>
+
+    <div class="mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
+      <div class="bg-white bg-opacity-10 border border-white/20 rounded-xl p-6 backdrop-blur">
+        <h3 class="text-xl font-semibold">Member</h3>
+        <p class="mt-3 text-white/90">Attend events, join language sessions and social nights.</p>
+        <a href="#contact" class="mt-4 inline-block px-4 py-2 rounded-full bg-white text-blue-600 font-semibold">Join Now</a>
+      </div>
+
+      <div class="bg-white bg-opacity-10 border border-white/20 rounded-xl p-6 backdrop-blur">
+        <h3 class="text-xl font-semibold">Volunteer</h3>
+        <p class="mt-3 text-white/90">Help plan events, run workshops or manage communications.</p>
+        <a href="#contact" class="mt-4 inline-block px-4 py-2 rounded-full bg-white text-blue-600 font-semibold">Get Involved</a>
+      </div>
+
+      <div class="bg-white bg-opacity-10 border border-white/20 rounded-xl p-6 backdrop-blur">
+        <h3 class="text-xl font-semibold">Partner</h3>
+        <p class="mt-3 text-white/90">Organizations and cultural centers who want to collaborate.</p>
+        <a href="#contact" class="mt-4 inline-block px-4 py-2 rounded-full bg-white text-blue-600 font-semibold">Partner With Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center text-blue-900">Get In Touch</h2>
+
+    <div class="mt-10 grid gap-12 grid-cols-1 md:grid-cols-2">
+      <div>
+        <h3 class="text-2xl font-semibold">Contact Information</h3>
+        <p class="mt-4 text-gray-600"><i class="fas fa-envelope"></i> <a href="mailto:qazsociety@yahoo.com" class="text-blue-600">qazsociety@yahoo.com</a></p>
+        <p class="mt-2 text-gray-600"><i class="fas fa-phone"></i> +32 (490) 21-54-12</p>
+        <p class="mt-2 text-gray-600"><i class="fas fa-phone"></i> +7 (700) 007-07-80</p>
+        <p class="mt-2 text-gray-600"><i class="fas fa-map-marker-alt"></i> Brussels, Belgium</p>
+
+        <div class="mt-6">
+          <h4 class="text-lg font-semibold">Follow Us</h4>
+          <div class="mt-3 flex items-center gap-3">
+            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/qazsociety.be/" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/qazaq-society-in-belgium" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-youtube"></i></a>
+          </div>
+
+          <div class="mt-6 bg-blue-50 text-blue-700 p-4 rounded-lg border-l-4 border-yellow-400">
+            <p class="text-sm"><i class="fas fa-language"></i> <strong>Multilingual Support</strong><br>
+            We can provide information in Kazakh, Russian, Dutch, and French on request.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-2xl font-semibold">Send Us a Message</h3>
+        <form id="contactForm" class="mt-6 space-y-4">
+          <div>
+            <input type="text" id="name" name="name" placeholder="Your Name" required class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <input type="email" id="email" name="email" placeholder="Your Email" required class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <input type="text" id="subject" name="subject" placeholder="Subject" required class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <textarea id="message" name="message" rows="5" placeholder="Your Message" required class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
+          <div>
+            <button type="submit" class="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-transparent hover:text-blue-600 border-2 border-blue-600 transition">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+

@@ -1,0 +1,47 @@
+{{ define "footer" }}
+<footer class="bg-white border-t mt-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid gap-8 md:grid-cols-3">
+      <div>
+        <img src="/assets/images/Qazaq-Society-Sign-Yellow.svg" alt="Qazaq Society" class="h-20 mb-4">
+        <p class="text-gray-600">Building community, preserving culture, supporting students in Belgium</p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-blue-900 mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-gray-700">
+          <li><a href="/#about" class="hover:text-yellow-400">About Us</a></li>
+          <li><a href="/#services" class="hover:text-yellow-400">Services</a></li>
+          <li><a href="/events" class="hover:text-yellow-400">Events</a></li>
+          <li><a href="/#contact" class="hover:text-yellow-400">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-blue-900 mb-4">Follow Us</h4>
+        <div class="flex items-center gap-3 mb-4">
+          <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/qazsociety.be/" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/company/qazaq-society-in-belgium" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <h4 class="font-semibold text-blue-900 mb-2">Newsletter</h4>
+        <p class="text-gray-600 mb-4">Subscribe to our newsletter for the latest updates</p>
+        <form class="flex gap-2 max-w-sm">
+          <input type="email" placeholder="Your email address" required class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-8 border-t pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-600">
+      <p>&copy; 2025 Qazaq Society In Belgium. All rights reserved.</p>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-blue-600">Privacy Policy</a>
+        <a href="#" class="hover:text-blue-600">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+{{ end }}
