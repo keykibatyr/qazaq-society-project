@@ -1,15 +1,12 @@
 package main
 
 import (
-	"html/template"
-	"log"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/keykibatyr/qazaq-society-project.git/internal/views"
 )
 
 type PageInfo struct {
-	Title   string
+	Title string
 }
 
 func main() {
@@ -19,51 +16,34 @@ func main() {
 		"internal/views/layout.tmpl",
 		"internal/views/navbar.tmpl",
 		"internal/views/footer.tmpl",
-		"internal/views/home.tmpl",
-		"internal/views/about.tmpl",
-		"internal/views/events/index.tmpl",
 	}
-
-	tpl, err := template.ParseFiles(files...)
-	if err != nil {
-		log.Fatalf("could not parse the template: %v", err)
-	}
-
-	for _, t := range tpl.Templates() {
-		log.Printf("template %q was loaded", t.Name())
-	}
-
-	r.SetHTMLTemplate(tpl)
-
+	
 	r.Static("/assets", "./assets")
 
-	r.GET("/", func(c *gin.Context) {
-		data := PageInfo{
-			Title: "Qazaq Society In Belgium",
-		}
+	tplHome := views.Must(views.ParseFileSys(append(files, "internal/views/home.tmpl")))
 
-		c.HTML(http.StatusOK, "home.tmpl", data)
+	tplAbout:= views.Must(views.ParseFileSys(append(files, "internal/views/about.tmpl")))
+
+	tplEvents:= views.Must(views.ParseFileSys(append(files, "internal/views/events/index.tmpl")))
+
+
+	r.GET("/", func(c *gin.Context) {
+		tplHome.ExecuteTemplate(c.Writer, c.Request, PageInfo{
+        Title: "Home Page",
+    	})
 	})
 
 	r.GET("/about", func(c *gin.Context) {
-		data := PageInfo{
-			Title: "About Us",
-		}
-
-		c.HTML(http.StatusOK, "about.tmpl", data)
+		tplAbout.ExecuteTemplate(c.Writer, c.Request, PageInfo{
+			Title: "About Page",
+		})
 	})
 
 	r.GET("/events", func(c *gin.Context) {
-		data := PageInfo{
-			Title: "Events",
-		}
-
-		// the parsed template for the events file registers under its base name
-		// (index.tmpl) so use that when executing.
-		c.HTML(http.StatusOK, "/events/index.tmpl", data)
+		tplEvents.ExecuteTemplate(c.Writer, c.Request, PageInfo{
+			Title: "Events Page",
+		})
 	})
 
-
-	log.Print("listening to :8080...")
 	r.Run(":8080")
 }

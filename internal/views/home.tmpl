@@ -1,9 +1,11 @@
+
 {{ define "content" }}
+<!-- Hero -->
 <!-- Hero -->
 <section class="relative bg-cover bg-center" style="background-image: url('/assets/images/main photo.jpeg'); min-height: 70vh;">
   <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/60"></div>
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center text-white">
-    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Welcome to Qazaq Society in Belgium</h1>
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Welcome to Qazaq Society in Belgium {{.Title}}</h1>
     <p class="mt-4 text-lg sm:text-xl max-w-2xl mx-auto">Connecting the Kazakh community through culture, language, and shared experiences</p>
     <div class="mt-8 flex justify-center gap-4 flex-wrap">
       <a href="#events" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-transparent border-2 border-blue-600 text-white hover:text-blue-600 transition">Upcoming Events</a>
@@ -193,4 +195,4 @@
 </section>
 {{ end }}
 
-
+{{ template "layout" . }}
