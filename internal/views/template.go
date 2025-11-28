@@ -36,7 +36,7 @@ func Must(t Template, err error) Template {
 	return t
 }
 
-func (t *Template) ExecuteTemplate(w http.ResponseWriter, r *http.Request, data interface{}) {
+func (t Template) ExecuteTemplate(w http.ResponseWriter, r *http.Request, data interface{}) {
 	tpl, err := t.htmlTpl.Clone()
 	if err != nil {
 		log.Print("cloning: %w", err)

@@ -7,12 +7,20 @@
 
     <form method="POST" action="/signup" class="mt-10 space-y-6">
 
-      <!-- Full Name -->
+      <!-- Fisrt Name -->
       <div>
-        <label for="name" class="block text-sm font-semibold text-gray-700">Full Name</label>
-        <input type="text" id="name" name="name" required
+        <label for="first_name" class="block text-sm font-semibold text-gray-700">First Name</label>
+        <input type="text" id="first_name" name="first_name" required
                class="mt-2 w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
+
+      <!-- Second Name -->
+      <div>
+        <label for="second_name" class="block text-sm font-semibold text-gray-700">Second Name</label>
+        <input type="text" id="second_name" name="second_name" required
+               class="mt-2 w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
 
       <!-- Email -->
       <div>
@@ -22,11 +30,11 @@
       </div>
 
       <!-- Phone -->
-      <div>
+      <!-- <div>
         <label for="phone" class="block text-sm font-semibold text-gray-700">Phone Number</label>
         <input type="text" id="phone" name="phone"
                class="mt-2 w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+      </div> -->
 
       <!-- Password -->
       <div>
@@ -36,11 +44,11 @@
       </div>
 
       <!-- Confirm Password -->
-      <div>
+      <!-- <div>
         <label for="confirm" class="block text-sm font-semibold text-gray-700">Confirm Password</label>
         <input type="password" id="confirm" name="confirm" required
                class="mt-2 w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+      </div> -->
 
       <!-- Submit -->
       <div class="pt-4">
@@ -53,7 +61,7 @@
       <!-- Link -->
       <p class="text-center text-sm text-gray-600">
         Already have an account?
-        <a href="/login" class="text-blue-600 font-semibold hover:underline">Log in</a>
+        <a href="/signin" class="text-blue-600 font-semibold hover:underline">Log in</a>
       </p>
 
     </form>
