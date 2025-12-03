@@ -85,7 +85,7 @@ func (u Users) Create(c *gin.Context) {
 	}
 
 	utils.SetCookie(c.Writer, CookieSession, session.Token)
-	c.Redirect(http.StatusFound, "/users/me")
+	c.Redirect(http.StatusFound, "/")
 
 }
 
@@ -116,7 +116,7 @@ func (u Users) ProcessSignIn(c *gin.Context) {
 
 	utils.SetCookie(c.Writer, CookieSession, session.Token)
 	// fmt.Fprintf(c.Writer, "Signed In as %+v", user)
-	c.Redirect(http.StatusFound, "/users/me")
+	c.Redirect(http.StatusFound, "/")
 }
 
 func (u Users) ProcessSignOut(c *gin.Context) {

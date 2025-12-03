@@ -57,7 +57,7 @@ func (es *EventService) CreateEvent(title, description, image string, start time
 
 func (es *EventService) GetAll() ([]Event, error) {
 	rows, err := es.DB.Query(`SELECT id, title, description, image_URL,
-	 start_date, published FROM events`)
+	 start_date, published FROM events ORDER BY start_date ASC`)
 	if err != nil {
 		return nil, fmt.Errorf("select all: %v", err)
 	}
@@ -88,8 +88,7 @@ func (es *EventService) GetLatest() (*Event, error) {
 	var event Event 
 	row := es.DB.QueryRow(`SELECT id, title, description, image_URL,
 	 start_date, published FROM events WHERE start_date > NOW() 
-	 ORDER BY start_date 
-	 ASC LIMIT 1;`)
+	 ORDER BY start_date ASC LIMIT 1;`)
 	err := row.Scan(&event.ID, &event.Title, &event.Description,
 		&event.ImageURL, &event.StartDate, &event.Published)
 	if err != nil {
@@ -101,5 +100,32 @@ func (es *EventService) GetLatest() (*Event, error) {
 	event.Time = event.StartDate.Format("3:04 PM")
 
 	return &event, nil
-	
+}
+
+func (es *EventService) Publish(id int) error {
+	_, err := es.DB.Exec(`UPDATE events SET published = TRUE WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("publishing: %v", err)
+	}
+
+	return nil
+}
+
+
+func (es *EventService) UnPublish(id int) error {
+	_, err := es.DB.Exec(`UPDATE events SET published = FALSE WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("publishing: %v", err)
+	}
+
+	return nil
+}
+
+func (es *EventService) Delete(id int) error {
+	_, err := es.DB.Exec(`DELETE FROM events WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("publishing: %v", err)
+	}
+
+	return nil
 }

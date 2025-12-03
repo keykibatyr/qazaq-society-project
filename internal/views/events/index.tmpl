@@ -12,6 +12,8 @@
   <div class="mt-10 space-y-10">
     {{ range .Events }}
 
+    {{ if .Published }}
+
     <article class="bg-white rounded-xl shadow overflow-hidden">
 
       <!-- Event image -->
@@ -47,9 +49,13 @@
     </article>
 
     {{ end }}
+
+
+    {{ end }}
   </div>
 
   {{ end }}
+
 
 </div>
 {{ end }}

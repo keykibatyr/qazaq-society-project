@@ -129,6 +129,9 @@ func main() {
 	admin.GET("/events", adminC.Events)
 	admin.GET("/events/new", adminC.EventsNew)
 	admin.POST("/events/new", adminC.AddEvents)
+	admin.POST("/events/:id/publish", adminC.PublishEvent)
+	admin.POST("/events/:id/unpublish", adminC.UnPublishEvent)
+	admin.POST("/events/:id/delete", adminC.DeleteEvent)
 
 	r.Run(":8080")
 }

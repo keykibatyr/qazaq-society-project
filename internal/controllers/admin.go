@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -23,29 +24,28 @@ type Admins struct {
 func (a Admins) Events(c *gin.Context) {
 	events, err := a.EventService.GetAll()
 	if err != nil {
-    	c.String(500, "error")
-    	return
+		c.String(500, "error")
+		return
 	}
 
 	data := gin.H{
-    "Events": events,
-}
+		"Events": events,
+	}
 	Render(c, a.Templates.Events, data)
 }
 
 func (a Admins) EventsNew(c *gin.Context) {
-		events, err := a.EventService.GetAll()
+	events, err := a.EventService.GetAll()
 	if err != nil {
-    c.String(500, "error")
-    return
+		c.String(500, "error")
+		return
 	}
 
 	data := gin.H{
-    "Events": events,
-}
+		"Events": events,
+	}
 	Render(c, a.Templates.EventsNew, data)
 }
-
 
 func (a Admins) AddEvents(c *gin.Context) {
 	title := c.PostForm("title")
@@ -86,4 +86,52 @@ func (a Admins) AddEvents(c *gin.Context) {
 
 	c.String(http.StatusOK, "Success")
 	fmt.Println(event)
+}
+
+func (a Admins) PublishEvent(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot extract id")
+		return
+	}
+
+	err = a.EventService.Publish(id)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot publish the event")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/events")
+}
+
+func (a Admins) UnPublishEvent(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot extract id")
+		return
+	}
+
+	err = a.EventService.UnPublish(id)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot publish the event")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/events")
+}
+
+func (a Admins) DeleteEvent(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot extract id")
+		return
+	}
+
+	err = a.EventService.Delete(id)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot publish the event")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/events")
 }
