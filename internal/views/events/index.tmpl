@@ -1,26 +1,55 @@
-
 {{ define "content" }}
 <div class="py-20 max-w-5xl mx-auto px-4">
 
-  <h1 class="text-3xl font-bold text-center text-blue-900">Recent Events {{.Title}}</h1>
+  <h1 class="text-3xl font-bold text-center text-blue-900">
+    Recent Events
+  </h1>
 
-  <article class="mt-10 bg-white rounded-xl shadow p-6">
+  {{ if not .Events }}
+  <p class="text-center text-gray-600 mt-10">No events available.</p>
+  {{ else }}
 
-    <div class="flex flex-col md:flex-row gap-6">
+  <div class="mt-10 space-y-10">
+    {{ range .Events }}
 
-      <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[100px]">
-        <div class="text-2xl font-bold">15</div>
-        <div class="text-sm uppercase">NOV</div>
+    <article class="bg-white rounded-xl shadow overflow-hidden">
+
+      <!-- Event image -->
+      {{ if .ImageURL }}
+      <img src="/{{ .ImageURL }}" class="w-full h-64 object-cover" alt="Event image">
+      {{ end }}
+
+      <div class="p-6 flex flex-col md:flex-row gap-6">
+
+        <!-- Date block -->
+        <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[100px]">
+          <div class="text-2xl font-bold">{{ .Day }}</div>
+          <div class="text-sm uppercase">{{ .Month }}</div>
+          <div class="text-sm text-white-600">
+            Starts at: {{ .Time }}
+          </div>
+        </div>
+
+        <!-- Title + Description -->
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold text-blue-900">
+            {{ .Title }}
+          </h2>
+
+          {{ if .Description }}
+          <p class="text-gray-700 mt-2">
+            {{ .Description }}
+          </p>
+          {{ end }}
+        </div>
+
       </div>
+    </article>
 
-      <div class="flex-1">
-        <h2 class="text-xl font-semibold text-blue-900">
-          Qazaq Society Teams Up with the Embassy...
-        </h2>
-      </div>
+    {{ end }}
+  </div>
 
-    </div>
-  </article>
+  {{ end }}
 
 </div>
 {{ end }}

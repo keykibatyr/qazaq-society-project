@@ -1,0 +1,96 @@
+{{ define "title" }}Manage Events{{ end }}
+
+{{ define "content" }}
+<div class="py-16 max-w-6xl mx-auto px-4">
+
+  <div class="flex items-center justify-between mb-10">
+    <h1 class="text-2xl font-semibold text-gray-900">Events</h1>
+
+    <a href="/admin/events/new"
+      class="px-4 py-2 rounded-md text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">
+      + New Event
+    </a>
+  </div>
+
+  {{ if not .Events }}
+  <p class="text-gray-600">No events created yet.</p>
+  {{ else }}
+
+  <div class="space-y-8">
+
+    {{ range .Events }}
+
+    <article class="bg-white rounded-xl shadow overflow-hidden">
+
+      <!-- Image -->
+      {{ if .ImageURL }}
+      <img src="/{{ .ImageURL }}" class="w-full h-56 object-cover" alt="Event Image">
+      {{ end }}
+
+      <div class="p-6 flex flex-col md:flex-row gap-6">
+
+        <!-- Date Block -->
+        <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[100px]">
+          <div class="text-2xl font-bold">{{ .Day }}</div>
+          <div class="text-sm uppercase">{{ .Month }}</div>
+          <div class="text-sm text-white-600">
+            Starts at: {{ .Time }}
+          </div>
+        </div>
+
+        <!-- Title + Info -->
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold text-blue-900">
+            {{ .Title }}
+          </h2>
+
+          {{ if .Description }}
+          <p class="text-gray-700 mt-2">
+            {{ .Description }}
+          </p>
+          {{ end }}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col justify-center gap-2 text-right">
+
+          <a href="/admin/events/{{ .ID }}/edit" class="text-blue-600 hover:underline font-medium text-sm">
+            Edit
+          </a>
+
+          {{ if .Published }}
+          <form action="/admin/events/{{ .ID }}/unpublish" method="POST">
+            <button class="text-orange-600 hover:underline font-medium text-sm">
+              Unpublish
+            </button>
+          </form>
+          {{ else }}
+          <form action="/admin/events/{{ .ID }}/publish" method="POST">
+            <button class="text-green-600 hover:underline font-medium text-sm">
+              Publish
+            </button>
+          </form>
+          {{ end }}
+
+          <form action="/admin/events/{{ .ID }}/delete" method="POST">
+            <button onclick="return confirm('Delete event?');" class="text-red-600 hover:underline font-medium text-sm">
+              Delete
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    {{ end }}
+
+  </div>
+
+  {{ end }}
+
+</div>
+{{ end }}
+
+{{ template "layout" . }}

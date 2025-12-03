@@ -12,6 +12,7 @@ import (
 type User struct {
 	ID           int
 	Email        string
+	Role	string
 	PasswordHash string
 	FirstName    string
 	LastName   string
@@ -33,6 +34,7 @@ func (u *UserService) Create(email, password, firstName, secondName string) (*Us
 
 	NewUser := User{
 		Email: email,
+		Role: "user",
 		PasswordHash: string(hashedPassword),
 		FirstName: firstName,
 		LastName: secondName,
@@ -40,13 +42,14 @@ func (u *UserService) Create(email, password, firstName, secondName string) (*Us
 		CreatedAt: time.Now(),
 	}
 
-	row := u.DB.QueryRow(`INSERT INTO users (email, password_hash, first_name, last_name, can_vote, created_at) 
-	VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`, NewUser.Email, 
+	row := u.DB.QueryRow(`INSERT INTO users (email, password_hash, first_name, last_name, can_vote, created_at, role) 
+	VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`, NewUser.Email, 
 	NewUser.PasswordHash, 
 	NewUser.FirstName, 
 	NewUser.LastName, 
 	NewUser.CanVote,
-	NewUser.CreatedAt)
+	NewUser.CreatedAt,
+	NewUser.Role)
 
 	err = row.Scan(&NewUser.ID)
 	if err != nil {
@@ -63,8 +66,8 @@ func (u *UserService) Authenticate(email, password string) (*User, error) {
 		Email: email,
 	}
 
-	row := u.DB.QueryRow(`SELECT password_hash, first_name, last_name FROM users WHERE email = $1`, user.Email)
-	err := row.Scan(&user.PasswordHash, &user.FirstName, &user.LastName)
+	row := u.DB.QueryRow(`SELECT id, password_hash, first_name, last_name, can_vote, created_at, role FROM users WHERE email = $1`, user.Email)
+	err := row.Scan(&user.ID, &user.PasswordHash, &user.FirstName, &user.LastName, &user.CanVote, &user.CreatedAt, &user.Role)
 	if err != nil {
 		return nil, fmt.Errorf("could not find: %v", err)
 	}

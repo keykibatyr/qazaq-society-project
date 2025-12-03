@@ -1,0 +1,37 @@
+{{ define "navbar_admin" }}
+<header class="sticky top-0 bg-white shadow z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+
+      <a href="/" class="flex items-center mr-10">
+        <img src="/assets/images/Qazaq-Society-Logo-Yellow-Blue.svg" class="h-12" alt="Qazaq Society Logo">
+      </a>
+
+      <div class="hidden md:flex items-center space-x-10">
+
+        <nav class="flex items-center space-x-8 text-sm font-semibold text-gray-800">
+          <a href="/admin/events" class="hover:text-blue-600 transition">Events</a>
+          <a href="/admin/users" class="hover:text-blue-600 transition">Users</a>
+          <a href="/admin/votes" class="hover:text-blue-600 transition">Votes</a>
+          <a href="/admin/galleries" class="hover:text-blue-600 transition">Galleries</a>
+        </nav>
+
+        <div class="flex items-center space-x-4">
+
+          <form action="/signout" method="POST">
+            <button class="inline-flex items-center justify-center 
+              px-4 py-2.5 rounded-md text-sm font-semibold 
+              border border-red-600 text-red-600
+              hover:bg-red-600 hover:text-white transition">
+              Sign Out
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</header>
+{{ end }}

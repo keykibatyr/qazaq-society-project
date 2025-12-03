@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/keykibatyr/qazaq-society-project.git/rand"
+	"github.com/keykibatyr/qazaq-society-project/rand"
 )
 
 const (
@@ -67,11 +67,11 @@ func (s *SessionService) User(token string) (*User, error) {
 
 	var User User
 	row := s.DB.QueryRow(`SELECT users.id, users.email, users.password_hash, users.first_name,
-	 users.last_name, users.can_vote, users.created_at FROM sessions INNER JOIN users ON users.id = sessions.user_id WHERE sessions.token_hash = $1`, tokenHash)
+	 users.last_name, users.can_vote, users.created_at, users.role FROM sessions INNER JOIN users ON users.id = sessions.user_id WHERE sessions.token_hash = $1`, tokenHash)
 	
 	err := row.Scan(&User.ID, &User.Email, &User.PasswordHash,
 		 &User.FirstName, &User.LastName, 
-		 &User.CanVote, &User.CreatedAt)
+		 &User.CanVote, &User.CreatedAt, &User.Role)
 
 	fmt.Printf("this is function 2: %+v\n", User.ID)
 	

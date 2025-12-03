@@ -24,25 +24,37 @@
         <!-- Auth buttons -->
         <div class="flex items-center space-x-4">
 
-          <!-- Sign In -->
-          <a href="/signin"
-             class="inline-flex items-center justify-center 
+          <!-- Sign Out -->
+           {{if .CurrentUser}}
+          <form action="/signout" method="POST">
+            <button class="inline-flex items-center justify-center 
+             px-4 py-2.5 rounded-md text-sm font-semibold 
+             border border-red-600 text-red-600
+             hover:bg-red-600 hover:text-white transition 
+             whitespace-nowrap">
+              Sign Out
+            </button>
+            {{else}}
+            <!-- Sign In -->
+            <a href="/signin" class="inline-flex items-center justify-center 
                     px-4 py-2.5 rounded-md text-sm font-semibold 
                     border border-blue-600 text-blue-600 
                     hover:bg-blue-600 hover:text-white transition 
                     whitespace-nowrap">
-            Sign In
-          </a>
+              Sign In
+            </a>
 
-          <!-- Sign Up -->
-          <a href="/signup"
-             class="inline-flex items-center justify-center 
+            <!-- Sign Up -->
+            <a href="/signup" class="inline-flex items-center justify-center 
                     px-4 py-2.5 rounded-md text-sm font-semibold 
                     bg-blue-600 text-white border border-blue-600
                     hover:bg-transparent hover:text-blue-600 transition 
                     whitespace-nowrap">
-            Sign Up
-          </a>
+              Sign Up
+            </a>
+            {{end}}
+
+          </form>
 
         </div>
 

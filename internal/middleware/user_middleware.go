@@ -1,12 +1,11 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/keykibatyr/qazaq-society-project.git/internal/models"
-	"github.com/keykibatyr/qazaq-society-project.git/internal/utils"
+	"github.com/keykibatyr/qazaq-society-project/internal/models"
+	"github.com/keykibatyr/qazaq-society-project/internal/utils"
 )
 
 type UserMiddleware struct {
@@ -18,14 +17,12 @@ type UserMiddleware struct {
 func (um *UserMiddleware) SetUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenCookie, err := utils.ReadCookie(c.Request, um.CookieName)
-		fmt.Println(tokenCookie)
 		if err != nil {
 			c.Next()
 			return
 		}
 
 		user, err := um.SessionService.User(tokenCookie)
-		fmt.Println(user)
 		if err != nil {
 			c.Next()
 			return
@@ -56,4 +53,18 @@ func CurrentUser(c *gin.Context) *models.User {
 	}
 
 	return val.(*models.User)
+}
+
+func RequireAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user := CurrentUser(c)
+		if user.Role != "admin" {
+			c.Redirect(302, "/")
+			c.Abort()
+			return
+		}
+
+		c.Next()
+
+	}
 }

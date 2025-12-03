@@ -40,8 +40,8 @@ func Open(cfg PostgresConfig) (*sql.DB, error) {
 	}
 
 	// if err := db.Ping(); err != nil {
-    //     return nil, fmt.Errorf("pinging database: %w", err)
-    // }
+	//     return nil, fmt.Errorf("pinging database: %w", err)
+	// }
 	return db, err
 }
 

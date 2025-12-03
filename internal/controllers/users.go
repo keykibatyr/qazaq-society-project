@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/keykibatyr/qazaq-society-project.git/internal/middleware"
-	"github.com/keykibatyr/qazaq-society-project.git/internal/models"
-	"github.com/keykibatyr/qazaq-society-project.git/internal/utils"
+	"github.com/keykibatyr/qazaq-society-project/internal/middleware"
+	"github.com/keykibatyr/qazaq-society-project/internal/models"
+	"github.com/keykibatyr/qazaq-society-project/internal/utils"
 )
 
 const (
@@ -18,20 +18,52 @@ type Users struct {
 	Templates struct {
 		New    Template
 		SignIn Template
+		Events Template
+		Home Template
 	}
 
 	UserService    *models.UserService
 	SessionService *models.SessionService
+	EventService *models.EventService
+}
+
+func (u Users) Home(c *gin.Context) {
+	event, err := u.EventService.GetLatest()
+	if err != nil {
+		c.String(500, "error")
+		return
+	}
+
+	data := gin.H{
+		"Title" : event.Title,
+		"Time" : event.Time,
+		"Month": event.Month,
+		"Day": event.Day,
+		"ImageURL": event.ImageURL,
+	}
+
+	Render(c, u.Templates.Home, data)
+}
+
+func (u Users) Events(c *gin.Context) {
+	events, err := u.EventService.GetAll()
+	if err != nil {
+		c.String(500, "error")
+		return
+	}
+
+	data := gin.H{
+		"Events" : events,
+	}
+
+	Render(c, u.Templates.Events, data)
 }
 
 func (u Users) New(c *gin.Context) {
-	var data struct {
-		Email string
+	data := gin.H{
+        "Email": "",
 	}
-
-	data.Email = c.PostForm("email")
-
-	u.Templates.New.ExecuteTemplate(c.Writer, c.Request, data)
+	Render(c, u.Templates.New, data)
 }
 
 func (u Users) Create(c *gin.Context) {
@@ -58,13 +90,10 @@ func (u Users) Create(c *gin.Context) {
 }
 
 func (u Users) SignIn(c *gin.Context) {
-	var data struct {
-		Email string
+	data := gin.H{
+        "Email": "",
 	}
-
-	data.Email = c.PostForm("email")
-
-	u.Templates.SignIn.ExecuteTemplate(c.Writer, c.Request, data)
+	Render(c, u.Templates.SignIn, data)
 }
 
 func (u Users) ProcessSignIn(c *gin.Context) {
@@ -77,6 +106,8 @@ func (u Users) ProcessSignIn(c *gin.Context) {
 		return
 	}
 
+	fmt.Print(user)
+
 	session, err := u.SessionService.Create(user.ID)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "oops could not create a session token")
@@ -84,9 +115,25 @@ func (u Users) ProcessSignIn(c *gin.Context) {
 	}
 
 	utils.SetCookie(c.Writer, CookieSession, session.Token)
-
 	// fmt.Fprintf(c.Writer, "Signed In as %+v", user)
 	c.Redirect(http.StatusFound, "/users/me")
+}
+
+func (u Users) ProcessSignOut(c *gin.Context) {
+	token, err := utils.ReadCookie(c.Request, CookieSession)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "oops could not read a cookie")
+		return
+	}
+	err = u.SessionService.Delete(token)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "oops could not delete a session")
+		return
+	}
+
+	utils.DeleteCookie(c.Writer, CookieSession)
+	c.Redirect(http.StatusFound, "/signin")
+	
 }
 
 func (u Users) CurrentUserController(c *gin.Context) {

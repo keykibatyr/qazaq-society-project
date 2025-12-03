@@ -47,19 +47,19 @@
 </section>
 
 <!-- Events preview -->
-<section id="events" class="py-20 relative bg-cover bg-center" style="background-image: url('/assets/images/GroupPhoto.JPG');">
+<section id="events" class="py-20 relative bg-cover bg-center" style="background-image: url(/{{.ImageURL}});">
   <div class="absolute inset-0 bg-black/50"></div>
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
     <h2 class="text-3xl font-bold text-center">Events</h2>
 
     <div class="mt-8 bg-white/95 rounded-xl shadow p-6 max-w-2xl mx-auto flex items-center gap-6 text-left text-gray-800">
       <div class="bg-blue-600 text-white rounded-lg p-4 text-center min-w-[80px]">
-        <div class="text-2xl font-bold">15</div>
-        <div class="text-sm uppercase tracking-wider">NOV</div>
+        <div class="text-2xl font-bold">{{.Day}}</div>
+        <div class="text-sm uppercase tracking-wider">{{.Month}}</div>
       </div>
       <div>
-        <h3 class="text-lg font-semibold text-blue-900">FUTI Event at the Embassy of Kazakhstan</h3>
-        <p class="text-sm text-gray-600 mt-1"><i class="far fa-clock"></i> 15:00 - 17:30</p>
+        <h3 class="text-lg font-semibold text-blue-900">{{.Title}}</h3>
+        <p class="text-sm text-gray-600 mt-1"><i class="far fa-clock"></i> {{.Time}} </p>
         <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt"></i> Embassy of Kazakhstan in Belgium, Brussels</p>
         <a href="/events" class="inline-block mt-3 px-4 py-2 rounded-full border border-white text-white hover:bg-white hover:text-blue-600 transition">Learn More</a>
       </div>

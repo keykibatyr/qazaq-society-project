@@ -11,6 +11,7 @@ func NewCookie(name, value string) *http.Cookie {
 		Value:    value,
 		Path:     "/",
 		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
 	}
 
 	return &cookie
