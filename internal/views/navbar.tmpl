@@ -1,24 +1,62 @@
 {{ define "navbar" }}
-<header class="sticky top-0 bg-white shadow z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
-    <div class="flex items-center justify-between h-20">
+  <header class="sticky top-0 left-0 z-[1000] flex h-[90px] items-center bg-white shadow-header transition-all">
+    <div class="w-full max-w-screen-xl mx-auto px-0">
+      <div class="flex h-full w-full items-center justify-between">
 
       <!-- Logo -->
-      <a href="/" class="flex items-center mr-10">
-        <img src="/assets/images/Qazaq-Society-Logo-Yellow-Blue.svg" class="h-12" alt="Qazaq Society Logo">
+      <!-- <a href="/" class="flex items-center max-w-[800px] mr-2">
+        <img src="/assets/images/Qazaq-Society-Logo-Yellow-Blue.svg"
+            class="block h-[200px] w-auto object-contain transition-all"
+            alt="Qazaq Society Logo">
+      </a> -->
+
+      <a href="/" class="flex items-center mr-2">
+        <img src="/assets/images/Qazaq-Society-Sign-Yellow.svg" class="block h-[50px] w-auto object-contain transition-all" alt="Qazaq Society Logo">
       </a>
 
       <!-- Navigation + Auth -->
       <div class="hidden md:flex items-center space-x-10">
 
         <!-- Main nav -->
-        <nav class="flex items-center space-x-8 text-sm font-semibold text-gray-800">
-          <a href="/#about" class="hover:text-blue-600 transition">Who We Are</a>
-          <a href="/#services" class="hover:text-blue-600 transition">What We Provide</a>
-          <a href="/events" class="hover:text-blue-600 transition">Events</a>
-          <a href="/#join" class="hover:text-blue-600 transition">Community</a>
-          <a href="/about" class="hover:text-blue-600 transition">Our Team</a>
-          <a href="/#contact" class="hover:text-blue-600 transition">Contact</a>
+        <nav class="hidden lg:flex items-center">
+        <ul class="flex flex-wrap h-full items-center">
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/#about"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >About Us</a>
+            </li>
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/#services"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >What Do We Provide</a>
+            </li>
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/events"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >Events</a>
+            </li>
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/#join"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >Community</a>
+            </li>
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/about"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >Our Team</a>
+            </li>
+            <li class="mx-[14px] flex h-full items-center">
+              <a
+                href="/#contact"
+                class="flex h-full items-center whitespace-nowrap rounded-[4px] px-4 py-3 text-[0.85rem] font-semibold uppercase tracking-[1px] text-textColor transition-all hover:bg-primary/10 hover:text-primary"
+              >Contact</a>
+            </li>
+          </ul>
         </nav>
 
         <!-- Auth buttons -->
