@@ -43,6 +43,12 @@
             {{ .Description }}
           </p>
           {{ end }}
+
+          {{ if .Location }}
+          <p class="text-gray-600 mt-2 font-medium">
+            Location: {{ .Location }}
+          </p>
+          {{ end }}
         </div>
 
       </div>

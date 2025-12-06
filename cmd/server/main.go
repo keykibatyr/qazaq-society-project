@@ -114,6 +114,8 @@ func main() {
 
 	adminC.Templates.Events = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/index.tmpl")))
 	adminC.Templates.EventsNew = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/new.tmpl")))
+	adminC.Templates.Edit =  views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/edit.tmpl")))
+	electionNew := views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/new.tmpl")))
 
 	admin := r.Group("/admin")
 	admin.Use(UserMW.RequireUser())
@@ -132,6 +134,12 @@ func main() {
 	admin.POST("/events/:id/publish", adminC.PublishEvent)
 	admin.POST("/events/:id/unpublish", adminC.UnPublishEvent)
 	admin.POST("/events/:id/delete", adminC.DeleteEvent)
+	admin.GET("/events/:id/edit", adminC.UpdateEvent)
+	admin.POST("/events/:id/edit", adminC.ProcessUpdateEvent)
+
+	admin.GET("/elections/new", func(c *gin.Context) {
+		controllers.Render(c, electionNew, nil)
+	})
 
 	r.Run(":8080")
 }

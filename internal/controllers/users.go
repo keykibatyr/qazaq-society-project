@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/keykibatyr/qazaq-society-project/internal/middleware"
 	"github.com/keykibatyr/qazaq-society-project/internal/models"
@@ -30,8 +29,7 @@ type Users struct {
 func (u Users) Home(c *gin.Context) {
 	event, err := u.EventService.GetLatest()
 	if err != nil {
-		c.String(500, "error")
-		return
+		Render(c, u.Templates.Home, nil)
 	}
 
 	data := gin.H{
@@ -40,6 +38,7 @@ func (u Users) Home(c *gin.Context) {
 		"Month": event.Month,
 		"Day": event.Day,
 		"ImageURL": event.ImageURL,
+		"Location" : event.Location,
 	}
 
 	Render(c, u.Templates.Home, data)
@@ -72,6 +71,20 @@ func (u Users) Create(c *gin.Context) {
 	firstName := c.PostForm("first_name")
 	secondName := c.PostForm("second_name")
 
+	if !(utils.ValidLen(password)) || !(utils.ValidPassword(password)) {
+		Render(c, u.Templates.New, gin.H{
+			"Error": "The Password must contain special charachters and longer be than 8 chars",
+		})
+		return 
+	}
+
+	if !u.UserService.EmailCheck(email) {
+		Render(c, u.Templates.New, gin.H{
+			"Error": "That Email is already registered",
+		})
+		return 
+	}
+
 	newUser, err := u.UserService.Create(email, password, firstName, secondName)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "oops could not create a user")
@@ -102,7 +115,9 @@ func (u Users) ProcessSignIn(c *gin.Context) {
 
 	user, err := u.UserService.Authenticate(email, password)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "oops could not sign in")
+		Render(c, u.Templates.SignIn, gin.H{
+			"Error": "The Password or Email are Incorrect",
+		})
 		return
 	}
 

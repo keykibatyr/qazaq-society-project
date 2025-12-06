@@ -79,3 +79,18 @@ func (u *UserService) Authenticate(email, password string) (*User, error) {
 
 	return &user, nil
 }
+
+func (u *UserService) EmailCheck(email string) bool {
+	email = strings.ToLower(email)
+
+	var dbEmail string
+
+	row := u.DB.QueryRow(`SELECT email FROM users WHERE email = $1`, email)
+	err := row.Scan(&dbEmail)
+	if err != nil {
+		return true //there is no such email in db, person can create an account with it
+	}
+
+	return false 
+
+}

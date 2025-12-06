@@ -14,6 +14,7 @@ type Admins struct {
 	Templates struct {
 		Events    Template
 		EventsNew Template
+		Edit Template
 	}
 
 	UserService     *models.UserService
@@ -53,6 +54,7 @@ func (a Admins) AddEvents(c *gin.Context) {
 	date := c.PostForm("date")
 	clock := c.PostForm("time")
 	published := c.PostForm("published") == "true"
+	location := c.PostForm("location")
 
 	dt := date + " " + clock
 	strdate, err := time.Parse("2006-01-02 15:04", dt)
@@ -78,14 +80,14 @@ func (a Admins) AddEvents(c *gin.Context) {
 		return
 	}
 
-	event, err := a.EventService.CreateEvent(title, description, dst, strdate, published)
+	_, err = a.EventService.CreateEvent(title, description, dst, location, strdate, published)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "oops could not create the event")
 		return
 	}
 
-	c.String(http.StatusOK, "Success")
-	fmt.Println(event)
+	c.Redirect(http.StatusFound, "/admin/events")
+
 }
 
 func (a Admins) PublishEvent(c *gin.Context) {
@@ -131,6 +133,83 @@ func (a Admins) DeleteEvent(c *gin.Context) {
 	if err != nil {
 		c.String(http.StatusInternalServerError, "cannot publish the event")
 		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/events")
+}
+
+func (a Admins) UpdateEvent(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+ 
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot extract id")
+		return
+	}
+
+	event, err := a.EventService.GetEventByID(id)
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot get the event")
+		return
+	}
+
+	date := event.StartDate.Format("2006-01-02")
+	time := event.StartDate.Format("15:04")
+
+	data := gin.H{
+		"Event": event,
+		"Date": date,
+		"Time": time,
+	}
+	Render(c, a.Templates.Edit, data)
+}
+
+
+func (a Admins) ProcessUpdateEvent(c *gin.Context) {
+	title := c.PostForm("title")
+	description := c.PostForm("description")
+	date := c.PostForm("date")
+	clock := c.PostForm("time")
+	image := c.PostForm("image_url")
+	published := c.PostForm("published") == "true"
+	location := c.PostForm("location")
+
+	id, err := strconv.Atoi(c.Param("id"))
+	
+	if err != nil {
+		c.String(http.StatusInternalServerError, "cannot extract id")
+		return
+	}
+
+
+	dt := date + " " + clock
+	strdate, err := time.Parse("2006-01-02 15:04", dt)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "oops could not parse the time")
+		return
+	}
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		err = a.EventService.Update(id, title, description, image, location, strdate, published)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "updating error")
+			return
+		}
+	} else {
+		dst := "./assets/uploads/" + file.Filename
+
+		err = c.SaveUploadedFile(file, dst)
+			if err != nil {
+				c.String(http.StatusInternalServerError, "oops could not upload an image")
+				return
+			}
+
+		err = a.EventService.Update(id, title, description, dst, location, strdate, published)
+			if err != nil {
+				c.String(http.StatusInternalServerError, "updating error")
+				return
+			}
 	}
 
 	c.Redirect(http.StatusFound, "/admin/events")

@@ -1,0 +1,99 @@
+{{ define "title" }}Create Voting{{ end }}
+
+{{ define "content" }}
+<div class="py-16 max-w-4xl mx-auto px-4">
+
+  <h1 class="text-2xl font-semibold mb-8">Create New Voting</h1>
+
+  <form method="POST" action="/admin/elections/new" enctype="multipart/form-data" class="space-y-8">
+
+    <!-- Title -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+      <input type="text" name="title" required
+             class="w-full border rounded-lg px-4 py-2 focus:ring">
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+      <textarea name="description" rows="4"
+                class="w-full border rounded-lg px-4 py-2 focus:ring"></textarea>
+    </div>
+
+    <!-- Dates -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+        <input type="datetime-local" name="start_date"
+               class="w-full border rounded-lg px-4 py-2 focus:ring">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+        <input type="datetime-local" name="end_date"
+               class="w-full border rounded-lg px-4 py-2 focus:ring">
+      </div>
+    </div>
+
+    <!-- Candidates -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-3">Candidates</label>
+
+      <div id="candidate-list" class="space-y-6">
+
+        <!-- First candidate block -->
+        <div class="candidate flex items-start gap-4">
+
+          <div class="flex-1 space-y-2">
+            <input type="text" name="candidates[]" placeholder="Candidate name"
+                   class="w-full border rounded-lg px-4 py-2">
+            <input type="file" name="images[]" accept="image/*"
+                   class="w-full border rounded-lg px-4 py-2 bg-white cursor-pointer">
+          </div>
+
+          <button type="button" class="remove-btn text-red-600 text-sm hidden">Remove</button>
+        </div>
+
+      </div>
+
+      <button type="button"
+              id="add-candidate"
+              class="mt-3 px-4 py-2 bg-gray-200 rounded-lg text-sm hover:bg-gray-300">
+        + Add Candidate
+      </button>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit"
+            class="px-6 py-2 bg-blue-600 text-white text-sm rounded-lg font-semibold hover:bg-blue-700">
+      Create Voting
+    </button>
+
+  </form>
+</div>
+
+<script>
+document.getElementById("add-candidate").onclick = function () {
+  const list = document.getElementById("candidate-list");
+
+  const div = document.createElement("div");
+  div.className = "candidate flex items-start gap-4";
+
+  div.innerHTML = `
+    <div class="flex-1 space-y-2">
+      <input type="text" name="candidates[]" placeholder="Candidate name"
+             class="w-full border rounded-lg px-4 py-2">
+      <input type="file" name="images[]" accept="image/*"
+             class="w-full border rounded-lg px-4 py-2 bg-white cursor-pointer">
+    </div>
+
+    <button type="button" class="remove-btn text-red-600 text-sm">Remove</button>
+  `;
+
+  list.appendChild(div);
+
+  div.querySelector(".remove-btn").onclick = () => div.remove();
+};
+</script>
+{{ end }}

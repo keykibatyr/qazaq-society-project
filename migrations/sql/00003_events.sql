@@ -7,6 +7,8 @@ CREATE TABLE events (
     image_URL TEXT,
     start_date TIMESTAMP NOT NULL,
 
+    location TEXT NOT NULL, 
+
     published BOOLEAN NOT NULL DEFAULT false,
 
     created_at TIMESTAMP NOT NULL DEFAULT now(),
