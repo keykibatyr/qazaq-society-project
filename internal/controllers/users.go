@@ -3,6 +3,8 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/keykibatyr/qazaq-society-project/internal/middleware"
 	"github.com/keykibatyr/qazaq-society-project/internal/models"
@@ -15,15 +17,20 @@ const (
 
 type Users struct {
 	Templates struct {
-		New    Template
-		SignIn Template
-		Events Template
-		Home Template
+		New          Template
+		SignIn       Template
+		Events       Template
+		Home         Template
+		AllElections Template
+		Election Template
 	}
 
-	UserService    *models.UserService
-	SessionService *models.SessionService
-	EventService *models.EventService
+	UserService      *models.UserService
+	SessionService   *models.SessionService
+	EventService     *models.EventService
+	CandidateService *models.CandidateService
+	ElectionService  *models.ElectionService
+	VoteService      *models.VoteService
 }
 
 func (u Users) Home(c *gin.Context) {
@@ -33,13 +40,15 @@ func (u Users) Home(c *gin.Context) {
 	}
 
 	data := gin.H{
-		"Title" : event.Title,
-		"Time" : event.Time,
-		"Month": event.Month,
-		"Day": event.Day,
+		"Title":    event.Title,
+		"Time":     event.Time,
+		"Month":    event.Month,
+		"Day":      event.Day,
 		"ImageURL": event.ImageURL,
-		"Location" : event.Location,
+		"Location": event.Location,
 	}
+
+	fmt.Println(data)
 
 	Render(c, u.Templates.Home, data)
 }
@@ -52,7 +61,7 @@ func (u Users) Events(c *gin.Context) {
 	}
 
 	data := gin.H{
-		"Events" : events,
+		"Events": events,
 	}
 
 	Render(c, u.Templates.Events, data)
@@ -60,7 +69,7 @@ func (u Users) Events(c *gin.Context) {
 
 func (u Users) New(c *gin.Context) {
 	data := gin.H{
-        "Email": "",
+		"Email": "",
 	}
 	Render(c, u.Templates.New, data)
 }
@@ -75,14 +84,14 @@ func (u Users) Create(c *gin.Context) {
 		Render(c, u.Templates.New, gin.H{
 			"Error": "The Password must contain special charachters and longer be than 8 chars",
 		})
-		return 
+		return
 	}
 
 	if !u.UserService.EmailCheck(email) {
 		Render(c, u.Templates.New, gin.H{
 			"Error": "That Email is already registered",
 		})
-		return 
+		return
 	}
 
 	newUser, err := u.UserService.Create(email, password, firstName, secondName)
@@ -104,7 +113,7 @@ func (u Users) Create(c *gin.Context) {
 
 func (u Users) SignIn(c *gin.Context) {
 	data := gin.H{
-        "Email": "",
+		"Email": "",
 	}
 	Render(c, u.Templates.SignIn, data)
 }
@@ -148,7 +157,7 @@ func (u Users) ProcessSignOut(c *gin.Context) {
 
 	utils.DeleteCookie(c.Writer, CookieSession)
 	c.Redirect(http.StatusFound, "/signin")
-	
+
 }
 
 func (u Users) CurrentUserController(c *gin.Context) {
@@ -166,4 +175,38 @@ func (u Users) CurrentUserController(c *gin.Context) {
 	///
 	///
 	///
+}
+
+func (u Users) AllElections(c *gin.Context) {
+	elections, err := u.ElectionService.GetAllElections()
+	if err != nil {
+		c.String(500, "error")
+		return
+	}
+
+	data := gin.H{
+		"Elections": elections,
+	}
+
+	Render(c, u.Templates.AllElections, data)
+
+}
+
+func (u Users) Election(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(500, "error")
+		return
+	}
+	candidates, err := u.CandidateService.GetAllCandidates(id)
+	if err != nil {
+		c.String(500, "error")
+		return
+	}
+
+	data := gin.H{
+		"Candidates": candidates,
+	}
+
+	Render(c, u.Templates.Election, data)
 }

@@ -58,16 +58,34 @@ func main() {
 		DB: db,
 	}
 
+	candidateService := &models.CandidateService{
+		DB: db,
+	}
+
+	electionService := &models.ElectionService{
+		DB: db,
+	}
+
+	voteService := &models.VoteService{
+		DB: db,
+	}
+
 	adminC := controllers.Admins{
 		UserService:     userService,
 		SerssionService: sessionService,
 		EventService:    eventService,
+		CandidateService: candidateService,
+		ElectionService: electionService,
+		VoteService: voteService,
 	}
 
 	userC := controllers.Users{
 		UserService:    userService,
 		SessionService: sessionService,
 		EventService:    eventService,
+		CandidateService: candidateService,
+		ElectionService: electionService,
+		VoteService: voteService,
 	}
 
 	userC.Templates.New = views.Must(views.ParseFileSys(append(filesUser, "internal/views/auth/signup.tmpl")))
@@ -77,6 +95,10 @@ func main() {
 	userC.Templates.Events = views.Must(views.ParseFileSys(append(filesUser, "internal/views/events/index.tmpl")))
 
 	userC.Templates.Home = views.Must(views.ParseFileSys(append(filesUser, "internal/views/home.tmpl")))
+
+	userC.Templates.AllElections = views.Must(views.ParseFileSys(append(filesUser, "internal/views/elections/index.tmpl")))
+
+	userC.Templates.Election = views.Must(views.ParseFileSys(append(filesUser, "internal/views/elections/vote.tmpl")))
 
 	UserMW := middleware.UserMiddleware{
 		SessionService: sessionService,
@@ -90,6 +112,8 @@ func main() {
 
 	auth.Use(UserMW.RequireUser())
 	auth.GET("/users/me", userC.CurrentUserController)
+	auth.GET("/users/elections", userC.AllElections)
+	auth.GET("/user/elections/:id", userC.Election)
 
 	r.GET("/", userC.Home)
 
@@ -115,7 +139,8 @@ func main() {
 	adminC.Templates.Events = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/index.tmpl")))
 	adminC.Templates.EventsNew = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/new.tmpl")))
 	adminC.Templates.Edit =  views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/edit.tmpl")))
-	electionNew := views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/new.tmpl")))
+	adminC.Templates.Elections = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/index.tmpl")))
+	adminC.Templates.ElectionsNew = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/new.tmpl")))
 
 	admin := r.Group("/admin")
 	admin.Use(UserMW.RequireUser())
@@ -137,9 +162,8 @@ func main() {
 	admin.GET("/events/:id/edit", adminC.UpdateEvent)
 	admin.POST("/events/:id/edit", adminC.ProcessUpdateEvent)
 
-	admin.GET("/elections/new", func(c *gin.Context) {
-		controllers.Render(c, electionNew, nil)
-	})
-
+	admin.GET("/elections", adminC.Elections)
+	admin.GET("/elections/new", adminC.ElectionsNew)
+	admin.POST("/elections/new", adminC.ProcessElectionsNew)
 	r.Run(":8080")
 }

@@ -1,0 +1,42 @@
+{{ define "title" }}Vote{{ end }}
+
+{{ define "content" }}
+<div class="py-16 max-w-4xl mx-auto px-4">
+
+  <h1 class="text-2xl font-semibold mb-8">{{ .Election.Title }}</h1>
+  <p class="text-gray-600 mb-10">{{ .Election.Description }}</p>
+
+  {{ if not .Candidates }}
+    <p>No candidates found for this election.</p>
+  {{ else }}
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+
+    {{ range .Candidates }}
+    <div class="bg-white shadow rounded-xl overflow-hidden">
+
+      <img src="{{ .ImageURL }}" class="w-full h-48 object-cover">
+
+      <div class="p-5 space-y-3">
+
+        <h2 class="text-lg font-semibold">{{ .Name }}</h2>
+
+        <form method="POST" action="/vote">
+          <input type="hidden" name="candidate_id" value="{{ .ID }}">
+          <input type="hidden" name="election_id" value="{{ .ElectionID }}">
+
+          <button class="mt-3 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Vote
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+    {{ end }}
+
+  </div>
+
+  {{ end }}
+</div>
+{{ end }}

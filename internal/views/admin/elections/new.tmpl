@@ -48,7 +48,7 @@
           <div class="flex-1 space-y-2">
             <input type="text" name="candidates[]" placeholder="Candidate name"
                    class="w-full border rounded-lg px-4 py-2">
-            <input type="file" name="images[]" accept="image/*"
+            <input type="file" name="images[]"
                    class="w-full border rounded-lg px-4 py-2 bg-white cursor-pointer">
           </div>
 
@@ -62,6 +62,12 @@
               class="mt-3 px-4 py-2 bg-gray-200 rounded-lg text-sm hover:bg-gray-300">
         + Add Candidate
       </button>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <input type="checkbox" name="published" value="true" id="published"
+             class="h-4 w-4 border-gray-300">
+      <label for="published" class="text-sm font-medium text-gray-700">Publish immediately</label>
     </div>
 
     <!-- Submit -->
@@ -84,7 +90,7 @@ document.getElementById("add-candidate").onclick = function () {
     <div class="flex-1 space-y-2">
       <input type="text" name="candidates[]" placeholder="Candidate name"
              class="w-full border rounded-lg px-4 py-2">
-      <input type="file" name="images[]" accept="image/*"
+      <input type="file" name="images[]"
              class="w-full border rounded-lg px-4 py-2 bg-white cursor-pointer">
     </div>
 

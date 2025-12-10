@@ -15,11 +15,16 @@ type Admins struct {
 		Events    Template
 		EventsNew Template
 		Edit Template
+		Elections Template
+		ElectionsNew Template
 	}
 
 	UserService     *models.UserService
 	SerssionService *models.SessionService
 	EventService    *models.EventService
+	ElectionService *models.ElectionService
+	CandidateService *models.CandidateService
+	VoteService *models.VoteService
 }
 
 func (a Admins) Events(c *gin.Context) {
@@ -204,7 +209,7 @@ func (a Admins) ProcessUpdateEvent(c *gin.Context) {
 				c.String(http.StatusInternalServerError, "oops could not upload an image")
 				return
 			}
-
+		
 		err = a.EventService.Update(id, title, description, dst, location, strdate, published)
 			if err != nil {
 				c.String(http.StatusInternalServerError, "updating error")
@@ -214,3 +219,79 @@ func (a Admins) ProcessUpdateEvent(c *gin.Context) {
 
 	c.Redirect(http.StatusFound, "/admin/events")
 }
+
+func (a Admins) Elections(c *gin.Context) {
+	Render(c, a.Templates.Elections, nil)
+}
+
+func(a Admins) ElectionsNew(c *gin.Context) {
+	Render(c, a.Templates.ElectionsNew, nil)
+}
+
+func (a Admins) ProcessElectionsNew(c *gin.Context) {
+	title := c.PostForm("title")
+	description := c.PostForm("description")
+	startDate := c.PostForm("start_date")
+	endDate := c.PostForm("end_date")
+	published := c.PostForm("published") == "true"
+
+	names := c.PostFormArray("candidates[]")
+
+	form, _:= c.MultipartForm()
+	files := form.File["images[]"]
+
+	if len(files) != len(names) {
+		c.String(http.StatusInternalServerError, "names != files")
+		return
+	}
+
+	layout := "2006-01-02T15:04"
+
+	str, err := time.Parse(layout, startDate)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not conver the time")
+		return
+	}
+
+
+	end, err := time.Parse(layout, endDate)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not conver the time")
+		return
+	}
+
+
+	election, err := a.ElectionService.Create(title, description, str, end, published)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not create the election")
+		return
+	}
+
+
+	for i := range names {
+		name := names[i]
+		file := files[i]
+
+		dst := "./assets/uploads/" + file.Filename
+
+		fmt.Println(dst)
+
+		err = c.SaveUploadedFile(file, dst)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "could not save the candidate photo")
+			return
+		}
+
+		
+
+		_, err := a.CandidateService.CreateCandidate(name, dst, election.ID)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "could not create a candidate")
+			return
+		}
+
+	}
+	
+	c.Redirect(http.StatusFound, "/admin/elections")
+}
+
