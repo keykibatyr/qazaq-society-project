@@ -210,3 +210,35 @@ func (u Users) Election(c *gin.Context) {
 
 	Render(c, u.Templates.Election, data)
 }
+
+func (u Users) Vote(c *gin.Context) {
+	candidateID := c.PostForm("candidate_id")
+	fmt.Println(candidateID)
+	electionID := c.PostForm("election_id")
+	fmt.Println(electionID)
+	electionId, err := strconv.Atoi(electionID)
+	if err != nil {
+		c.String(500, "error_ELECTION")
+		return
+	}
+	candidateId, err := strconv.Atoi(candidateID)
+	if err != nil {
+		c.String(500, "error_CANDIDATE")
+		return
+	}
+
+	user := middleware.CurrentUser(c)
+	fmt.Println(user)
+
+	canVote := u.VoteService.VoteCheck(user.ID, electionId)
+	if canVote {	
+		_, err := u.VoteService.AddVote(user.ID, candidateId, electionId)
+		if err != nil {
+			c.String(500, "error_VOTE")
+			return
+		}
+	} else{
+		c.String(500, "u already voted")
+		return 
+	}
+}

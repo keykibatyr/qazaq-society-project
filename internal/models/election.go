@@ -66,6 +66,8 @@ func (e *ElectionService) GetAllElections() ([]Election, error) {
 		return nil, fmt.Errorf("etracting all elections: %v", err)
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		var election Election
 

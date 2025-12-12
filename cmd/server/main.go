@@ -114,6 +114,7 @@ func main() {
 	auth.GET("/users/me", userC.CurrentUserController)
 	auth.GET("/users/elections", userC.AllElections)
 	auth.GET("/user/elections/:id", userC.Election)
+	auth.POST("/vote", userC.Vote)
 
 	r.GET("/", userC.Home)
 
@@ -133,6 +134,7 @@ func main() {
 	r.POST("/signin", userC.ProcessSignIn)
 
 	r.POST("/signout", userC.ProcessSignOut)
+	
 
 	tplTest := views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/test.tmpl")))
 

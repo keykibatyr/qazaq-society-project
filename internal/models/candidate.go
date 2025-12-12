@@ -36,14 +36,16 @@ func (c *CandidateService) CreateCandidate(name, image string, electionId int) (
 func (c CandidateService) GetAllCandidates(electionId int) ([]Candidate, error) {
 	var candidates []Candidate
 
-	row, err := c.DB.Query(`SELECT id, name, election_id, image_url FROM candidates WHERE election_id = $1`, electionId)
+	rows, err := c.DB.Query(`SELECT id, name, election_id, image_url FROM candidates WHERE election_id = $1`, electionId)
 	if err != nil {
 		return nil, fmt.Errorf("getting all candidates: %v", err)
 	}
 
-	for row.Next(){
+	defer rows.Close()
+
+	for rows.Next(){
 		var candidate Candidate
-		err = row.Scan(&candidate.ID, &candidate.Name, &candidate.ElectionID, &candidate.ImageURL)
+		err = rows.Scan(&candidate.ID, &candidate.Name, &candidate.ElectionID, &candidate.ImageURL)
 		if err != nil {
 			return nil, fmt.Errorf("getting a candidate: %v", err)
 		}

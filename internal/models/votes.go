@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -26,7 +27,7 @@ func (v *VoteService) AddVote(userId, candidateId, electionId int) (*Vote, error
 		CreatedAt:   time.Now(),
 	}
 
-	row := v.DB.QueryRow(`INSERT INTO votes (election_id, candidate_id, user_id, created_id) VALUES ($1, $2, $3) RETURNING id`,
+	row := v.DB.QueryRow(`INSERT INTO votes (election_id, candidate_id, user_id, created_at) VALUES ($1, $2, $3, $4) RETURNING id`,
 		vote.ElectionID, vote.CandidateID, vote.UserID, vote.CreatedAt)
 
 	err := row.Scan(&vote.ID)
@@ -37,3 +38,19 @@ func (v *VoteService) AddVote(userId, candidateId, electionId int) (*Vote, error
 	return &vote, nil
 }
 
+func (v *VoteService) VoteCheck(userId, electionId int) bool {
+	row := v.DB.QueryRow(`SELECT id FROM votes WHERE user_id = $1 AND election_id = $2`, userId, electionId)
+
+	var voteExists int
+
+	err := row.Scan(&voteExists)
+	if errors.Is(err, sql.ErrNoRows) {
+		return true
+	}
+
+	if err != nil {
+		return false
+	}
+
+	return false
+}
