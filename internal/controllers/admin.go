@@ -17,6 +17,7 @@ type Admins struct {
 		Edit Template
 		Elections Template
 		ElectionsNew Template
+		Users Template
 	}
 
 	UserService     *models.UserService
@@ -295,3 +296,16 @@ func (a Admins) ProcessElectionsNew(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/elections")
 }
 
+func (a Admins) Users(c *gin.Context) {
+	users, err := a.UserService.GetAllUsers()
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not show the users")
+		return
+	}
+
+	data := gin.H{
+		"Users" : users,
+	}
+
+	Render(c, a.Templates.Users, data)
+}

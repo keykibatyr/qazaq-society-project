@@ -35,8 +35,13 @@ func (um *UserMiddleware) SetUser() gin.HandlerFunc {
 
 func (um *UserMiddleware) RequireUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, exist := c.Get("user")
-		if !exist {
+		val, exist := c.Get("user")
+		user := val.(*models.User)
+		valid, err := um.SessionService.IsExpired(user.ID)
+		if err != nil {
+			return
+		}
+		if !exist || !valid{
 			c.Redirect(http.StatusFound, um.SignInPage)
 			c.Abort()
 			return

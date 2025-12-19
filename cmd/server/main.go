@@ -100,6 +100,7 @@ func main() {
 
 	userC.Templates.Election = views.Must(views.ParseFileSys(append(filesUser, "internal/views/elections/vote.tmpl")))
 
+
 	UserMW := middleware.UserMiddleware{
 		SessionService: sessionService,
 		SignInPage:     "/signin",
@@ -143,6 +144,7 @@ func main() {
 	adminC.Templates.Edit =  views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/events/edit.tmpl")))
 	adminC.Templates.Elections = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/index.tmpl")))
 	adminC.Templates.ElectionsNew = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/new.tmpl")))
+	adminC.Templates.Users = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/users/list.tmpl")))
 
 	admin := r.Group("/admin")
 	admin.Use(UserMW.RequireUser())
@@ -167,5 +169,7 @@ func main() {
 	admin.GET("/elections", adminC.Elections)
 	admin.GET("/elections/new", adminC.ElectionsNew)
 	admin.POST("/elections/new", adminC.ProcessElectionsNew)
+
+	admin.GET("/users", adminC.Users)
 	r.Run(":8080")
 }

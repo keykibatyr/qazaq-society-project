@@ -94,3 +94,27 @@ func (u *UserService) EmailCheck(email string) bool {
 	return false 
 
 }
+
+func (u *UserService) GetAllUsers() ([]User, error) {
+	var users []User
+
+	rows, err := u.DB.Query(`SELECT id, email, password_hash, first_name, last_name, can_vote, created_at, role FROM users`)
+	if err != nil {
+		return nil, fmt.Errorf("could not extract users")
+	}
+
+	for rows.Next() {
+		var user User 
+		err := rows.Scan(&user.ID, &user.Email, 
+			&user.PasswordHash, &user.FirstName, 
+			&user.LastName, &user.CanVote, 
+			&user.CreatedAt, &user.Role)
+		if err != nil {
+			return nil, fmt.Errorf("could not scan the user")
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
