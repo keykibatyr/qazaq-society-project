@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/keykibatyr/qazaq-society-project/internal/middleware"
 	"github.com/keykibatyr/qazaq-society-project/internal/models"
+	"github.com/keykibatyr/qazaq-society-project/internal/requests"
 	"github.com/keykibatyr/qazaq-society-project/internal/utils"
 )
 
@@ -36,7 +37,14 @@ type Users struct {
 func (u Users) Home(c *gin.Context) {
 	event, err := u.EventService.GetLatest()
 	if err != nil {
-		Render(c, u.Templates.Home, nil)
+		Render(c, u.Templates.Home, gin.H{
+		"Title":    "",
+		"Time":     "",
+		"Month":    "",
+		"Day":      "",
+		"ImageURL": "",
+		"Location": "",
+	})
 	}
 
 	data := gin.H{
@@ -75,26 +83,36 @@ func (u Users) New(c *gin.Context) {
 }
 
 func (u Users) Create(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
-	firstName := c.PostForm("first_name")
-	secondName := c.PostForm("second_name")
+	// email := c.PostForm("email")
+	// password := c.PostForm("password")
+	// firstName := c.PostForm("first_name")
+	// secondName := c.PostForm("second_name")
 
-	if !(utils.ValidLen(password)) || !(utils.ValidPassword(password)) {
+	var regForm requests.RegisterForm
+
+	err := c.ShouldBind(&regForm)
+	if err != nil {
+		Render(c, u.Templates.New, gin.H{
+			"Error": "Please enter a valid Password and Email Address",
+		})
+		return
+	}
+
+	if !(utils.ValidLen(regForm.Password)) || !(utils.ValidPassword(regForm.Password)) {
 		Render(c, u.Templates.New, gin.H{
 			"Error": "The Password must contain special charachters and longer be than 8 chars",
 		})
 		return
 	}
 
-	if !u.UserService.EmailCheck(email) {
+	if !u.UserService.EmailCheck(regForm.Email) {
 		Render(c, u.Templates.New, gin.H{
 			"Error": "That Email is already registered",
 		})
 		return
 	}
 
-	newUser, err := u.UserService.Create(email, password, firstName, secondName)
+	newUser, err := u.UserService.Create(regForm.Email, regForm.Password, regForm.Name, regForm.Surname)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "oops could not create a user")
 		return
@@ -119,10 +137,18 @@ func (u Users) SignIn(c *gin.Context) {
 }
 
 func (u Users) ProcessSignIn(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
+	var logForm requests.LoginForm
 
-	user, err := u.UserService.Authenticate(email, password)
+	err := c.ShouldBind(logForm)
+	if err != nil {
+		Render(c, u.Templates.New, gin.H{
+			"Error": "Please enter a valid Password and Email Address",
+		})
+		return
+	}
+	
+
+	user, err := u.UserService.Authenticate(logForm.Email, logForm.Password)
 	if err != nil {
 		Render(c, u.Templates.SignIn, gin.H{
 			"Error": "The Password or Email are Incorrect",

@@ -8,6 +8,11 @@ import (
 	"github.com/keykibatyr/qazaq-society-project/internal/utils"
 )
 
+
+const (
+	CookieSession = "session"
+)
+
 type UserMiddleware struct {
 	SessionService *models.SessionService
 	CookieName     string
@@ -36,12 +41,18 @@ func (um *UserMiddleware) SetUser() gin.HandlerFunc {
 func (um *UserMiddleware) RequireUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		val, exist := c.Get("user")
-		user := val.(*models.User)
-		valid, err := um.SessionService.IsExpired(user.ID)
-		if err != nil {
+		if !exist{
+			c.Redirect(http.StatusFound, um.SignInPage)
+			c.Abort()
 			return
 		}
-		if !exist || !valid{
+		user := val.(*models.User)
+		expired, err := um.SessionService.IsExpired(user.ID)
+		if  err != nil || expired{
+			token, _ := utils.ReadCookie(c.Request, CookieSession)
+			_ = um.SessionService.Delete(token)
+			utils.DeleteCookie(c.Writer, CookieSession)
+			
 			c.Redirect(http.StatusFound, um.SignInPage)
 			c.Abort()
 			return
@@ -57,7 +68,12 @@ func CurrentUser(c *gin.Context) *models.User {
 		return nil
 	}
 
-	return val.(*models.User)
+	user, ok := val.(*models.User) 
+	if !ok {
+		return nil
+	}
+
+	return user
 }
 
 func RequireAdmin() gin.HandlerFunc {
