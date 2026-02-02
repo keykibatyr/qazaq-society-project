@@ -63,7 +63,7 @@ func (e *ElectionService) GetAllElections() ([]Election, error) {
 
 	rows, err := e.DB.Query(`SELECT id, title, description, start_at, end_at, published, created_at FROM elections`)
 	if err != nil {
-		return nil, fmt.Errorf("etracting all elections: %v", err)
+		return nil, fmt.Errorf("extracting all elections: %v", err)
 	}
 
 	defer rows.Close()
@@ -78,7 +78,7 @@ func (e *ElectionService) GetAllElections() ([]Election, error) {
 		
 
 		if err != nil {
-			return nil, fmt.Errorf("etracting election: %v", err)	
+			return nil, fmt.Errorf("extracting election: %v", err)	
 		}
 
 		election.StartDay = election.StartDate.Format("02")
@@ -94,4 +94,22 @@ func (e *ElectionService) GetAllElections() ([]Election, error) {
 	}
 
 	return elections, nil
+}
+
+func (e *ElectionService) UnPublish(id int) error {
+	_, err := e.DB.Exec(`UPDATE elections SET published = FALSE WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("publishing: %v", err)
+	}
+
+	return nil
+}
+
+func (e *ElectionService) Publish(id int) error {
+	_, err := e.DB.Exec(`UPDATE elections SET published = TRUE WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("publishing: %v", err)
+	}
+
+	return nil
 }

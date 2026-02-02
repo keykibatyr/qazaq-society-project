@@ -99,14 +99,16 @@ func (s *SessionService) hash(token string) string {
 	return base64.URLEncoding.EncodeToString(tokenHash[:])
 }
 
-func (s *SessionService) IsExpired(userID int) (bool, error) { //returns true if expired 
+func (s *SessionService) IsExpired(token string) (bool, error) { //returns true if expired 
 	var expireDate time.Time
 
-	row := s.DB.QueryRow(`SELECT expires_at, token_hash FROM sessions WHERE user_id = $1`, userID)
+	tokenHash := s.hash(token)
+
+	row := s.DB.QueryRow(`SELECT expires_at FROM sessions WHERE token_hash = $1`, tokenHash)
 	err := row.Scan(&expireDate)
 	if err != nil {
 		return false, fmt.Errorf("could not scan for the expiration date")
 	}
-
+	fmt.Print(expireDate.Before(time.Now()))
 	return expireDate.Before(time.Now()), nil
-}
+} ///REFSCTOR REFACTOR TO TAKE A TOKEN

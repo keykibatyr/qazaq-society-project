@@ -40,7 +40,7 @@ func (v *VoteService) AddVote(userId, candidateId, electionId int) (*Vote, error
 
 func (v *VoteService) VoteCheck(userId, electionId int) bool {
 	row := v.DB.QueryRow(`SELECT id FROM votes WHERE user_id = $1 AND election_id = $2`, userId, electionId)
-
+	
 	var voteExists int
 
 	err := row.Scan(&voteExists)
@@ -53,4 +53,43 @@ func (v *VoteService) VoteCheck(userId, electionId int) bool {
 	}
 
 	return false
+}
+
+type CandidateVoteCount struct {
+	CandidateID int
+	CandidateName string
+	VoteCount int
+}
+
+func(v *VoteService) VotePerCandidate(electionID int) ([]CandidateVoteCount, error) {
+	var candidateVoteCount []CandidateVoteCount
+
+	rows, err := v.DB.Query(`SELECT COUNT(v.candidate_id), c.id
+	 FROM candidates c
+	 LEFT JOIN votes v
+	 ON v.election_id = c.election_id AND
+	 v.candidate_id = c.id WHERE c.election_id = $1
+	 GROUP BY c.id`, electionID)
+	if err != nil {
+		return nil, fmt.Errorf("extracting coandidate-votes: %v", err)
+	}
+
+	for rows.Next() {
+		var candidateVC CandidateVoteCount
+
+		err := rows.Scan(&candidateVC.VoteCount, &candidateVC.CandidateID)
+
+		if err != nil {
+			return nil, fmt.Errorf("extracting candidate-votes row: %v", err)
+		}
+
+		candidateVoteCount = append(candidateVoteCount, candidateVC)
+	
+	}
+
+	fmt.Println(candidateVoteCount)
+
+	return candidateVoteCount, nil 
+
+	//REFACTOOOOR ADD ROWS WITH CANDIDATES WITH 0 VOTES TOO 
 }

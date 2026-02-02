@@ -145,6 +145,7 @@ func main() {
 	adminC.Templates.Elections = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/index.tmpl")))
 	adminC.Templates.ElectionsNew = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/elections/new.tmpl")))
 	adminC.Templates.Users = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/users/list.tmpl")))
+	adminC.Templates.CandidateVotes = views.Must(views.ParseFileSys(append(filesAdmin, "internal/views/admin/votes/list.tmpl")))
 
 	admin := r.Group("/admin")
 	admin.Use(UserMW.RequireUser())
@@ -168,6 +169,11 @@ func main() {
 
 	admin.GET("/elections", adminC.Elections)
 	admin.GET("/elections/new", adminC.ElectionsNew)
+
+	admin.POST("/elections/:id/publish", adminC.ElectionPublish)
+	admin.POST("/elections/:id/unpublish", adminC.ElectionUnPublish)
+	admin.GET("/elections/:id/results", adminC.CandidateVotes)
+
 	admin.POST("/elections/new", adminC.ProcessElectionsNew)
 
 	admin.GET("/users", adminC.Users)

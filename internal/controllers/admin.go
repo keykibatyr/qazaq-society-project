@@ -18,6 +18,7 @@ type Admins struct {
 		Elections Template
 		ElectionsNew Template
 		Users Template
+		CandidateVotes Template
 	}
 
 	UserService     *models.UserService
@@ -38,6 +39,7 @@ func (a Admins) Events(c *gin.Context) {
 	data := gin.H{
 		"Events": events,
 	}
+
 	Render(c, a.Templates.Events, data)
 }
 
@@ -222,7 +224,19 @@ func (a Admins) ProcessUpdateEvent(c *gin.Context) {
 }
 
 func (a Admins) Elections(c *gin.Context) {
-	Render(c, a.Templates.Elections, nil)
+	elections, err := a.ElectionService.GetAllElections()
+	fmt.Println("Hello")
+	fmt.Println(elections)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "listing elections error")
+		return 
+	}
+
+	data := gin.H{
+		"Elections": elections,
+	}
+
+	Render(c, a.Templates.Elections, data)
 }
 
 func(a Admins) ElectionsNew(c *gin.Context) {
@@ -296,6 +310,38 @@ func (a Admins) ProcessElectionsNew(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/elections")
 }
 
+func (a Admins) ElectionPublish(c *gin.Context){
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not read the param")
+		return
+	}
+
+	err = a.ElectionService.Publish(id)
+	if err != nil{
+		c.String(http.StatusInternalServerError, "could not publish the election")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/elections")
+}
+
+func (a Admins) ElectionUnPublish(c *gin.Context){
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not read the param")
+		return
+	}
+
+	err = a.ElectionService.UnPublish(id)
+	if err != nil{
+		c.String(http.StatusInternalServerError, "could not unpublish the election")
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/admin/elections")
+}
+
 func (a Admins) Users(c *gin.Context) {
 	users, err := a.UserService.GetAllUsers()
 	if err != nil {
@@ -308,4 +354,29 @@ func (a Admins) Users(c *gin.Context) {
 	}
 
 	Render(c, a.Templates.Users, data)
+}
+
+func (a Admins) CandidateVotes(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "could not read param")
+	}
+
+	candidateVotesList, err := a.VoteService.VotePerCandidate(id)
+
+	for i := range candidateVotesList  {
+		candidate, err := a.CandidateService.GetCandidateByID(candidateVotesList[i].CandidateID) 
+		if err != nil {
+			c.String(http.StatusInternalServerError, "could not extract the candidate")
+			return
+		}
+
+		candidateVotesList[i].CandidateName = candidate.Name
+	}
+
+	data := gin.H{
+		"CandidateVoteCount": candidateVotesList,
+	}
+
+	Render(c, a.Templates.CandidateVotes, data)
 }

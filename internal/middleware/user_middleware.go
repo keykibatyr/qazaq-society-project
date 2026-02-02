@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -47,8 +48,20 @@ func (um *UserMiddleware) RequireUser() gin.HandlerFunc {
 			return
 		}
 		user := val.(*models.User)
-		expired, err := um.SessionService.IsExpired(user.ID)
+
+		token, err := utils.ReadCookie(c.Request, um.CookieName)
+		if err != nil {
+			c.Next()
+			return
+		}
+		fmt.Println(token)
+
+		fmt.Print(user)
+		expired, err := um.SessionService.IsExpired(token) //REFACTOR REFACTOR REFACTOR
+		fmt.Println(expired)
+		fmt.Println(err)
 		if  err != nil || expired{
+			fmt.Printf("HERE I AM")
 			token, _ := utils.ReadCookie(c.Request, CookieSession)
 			_ = um.SessionService.Delete(token)
 			utils.DeleteCookie(c.Writer, CookieSession)

@@ -1,0 +1,28 @@
+{{ define "content" }}
+<div class="max-w-6xl mx-auto py-10">
+  <h1 class="text-2xl font-semibold mb-6">Results</h1>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-200">
+      <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Name</th>
+          <th class="px-4 py-2">Votes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .CandidateVoteCount }}
+        <tr class="border-t">
+          <td class="px-4 py-2">{{ .CandidateID }}</td>
+          <td class="px-4 py-2">{{ .CandidateName }}</td>
+          <td class="px-4 py-2">{{ .VoteCount }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{ end }}
+
+{{ template "layout" . }}

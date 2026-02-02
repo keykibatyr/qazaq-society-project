@@ -27,8 +27,9 @@
           <h2 class="text-xl font-semibold text-gray-900">{{ .Title }}</h2>
 
           <p class="text-sm text-gray-600 mt-1">
-            {{ .StartAt.Format "02 Jan 2006 15:04" }} →
-            {{ .EndAt.Format "02 Jan 2006 15:04" }}
+            {{ .StartDay }} {{ .StartMonth }} {{ .StartTime }}
+            →
+            {{ .EndDay }} {{ .EndMonth }} {{ .EndTime }}
           </p>
         </div>
 
@@ -37,24 +38,24 @@
              class="text-blue-600 hover:underline text-sm">
             View Results
           </a>
-
-          <a href="/admin/elections/{{ .ID }}/candidates"
-             class="text-blue-600 hover:underline text-sm">
-            Candidates
-          </a>
         </div>
       </div>
 
       <!-- Published Status -->
       <div class="flex items-center gap-3">
         {{ if .Published }}
+        <form action = "/admin/elections/{{ .ID }}/unpublish" method = "POST">
           <span class="text-green-700 text-sm font-semibold">Published</span>
-          <a href="/admin/elections/{{ .ID }}/unpublish"
-             class="text-red-600 text-sm hover:underline">Unpublish</a>
+            <button class="text-orange-600 hover:underline font-medium text-sm">
+              Unpublish
+            </button>
+        </form>
         {{ else }}
-          <span class="text-gray-500 text-sm font-semibold">Not Published</span>
-          <a href="/admin/elections/{{ .ID }}/publish"
-             class="text-green-600 text-sm hover:underline">Publish</a>
+        <form action = "/admin/elections/{{ .ID }}/publish" method = "POST">
+          <span class="text-green-700 text-sm font-semibold">Unpublished</span>
+            <button class="text-orange-600 hover:underline font-medium text-sm">
+              Publish
+            </button>
         {{ end }}
       </div>
 

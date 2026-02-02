@@ -55,3 +55,17 @@ func (c CandidateService) GetAllCandidates(electionId int) ([]Candidate, error) 
 
 	return candidates, nil
 }
+
+func (c CandidateService) GetCandidateByID(candidateID int) (*Candidate, error) {
+	candidate := Candidate{
+		ID:candidateID,
+	}
+
+	row := c.DB.QueryRow(`SELECT election_id, name, image_url FROM candidates WHERE id = $1`, candidateID)
+	err := row.Scan(&candidate.ElectionID, &candidate.Name, &candidate.ImageURL)
+	if err != nil {
+		return nil, fmt.Errorf("getting the candidate %v", err)
+	}
+
+	return &candidate, nil
+}

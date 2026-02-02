@@ -19,7 +19,7 @@ type PostgresConfig struct {
 
 func DefaultConfig() PostgresConfig {
 	return PostgresConfig{
-		Host:     "localhost",
+		Host:     "db",
 		Port:     "5432",
 		User:     "keykibatyr",
 		Password: "Alisher0505",

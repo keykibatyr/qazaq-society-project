@@ -130,6 +130,9 @@ func (u Users) Create(c *gin.Context) {
 }
 
 func (u Users) SignIn(c *gin.Context) {
+	if middleware.CurrentUser(c) != nil {
+		c.Redirect(http.StatusFound, "/")
+	}
 	data := gin.H{
 		"Email": "",
 	}
@@ -139,7 +142,7 @@ func (u Users) SignIn(c *gin.Context) {
 func (u Users) ProcessSignIn(c *gin.Context) {
 	var logForm requests.LoginForm
 
-	err := c.ShouldBind(logForm)
+	err := c.ShouldBind(&logForm)
 	if err != nil {
 		Render(c, u.Templates.New, gin.H{
 			"Error": "Please enter a valid Password and Email Address",
